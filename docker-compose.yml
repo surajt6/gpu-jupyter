@@ -1,35 +1,28 @@
 version: "3.8"
 services:
   gpu-jupyter:
-    container_name: gpu-jupyter
-    build: .build
+    container_name: ml-base
+    shm_size: 8gb
+    restart: unless-stopped
+    image: gpu-jupyter:latest
     deploy:
       resources:
         reservations:
           devices:
-            - capabilities:
-              - gpu
-    # # Set hardware limits: one GPU, max. 48GB RAM, max. 31 GPUs
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           capabilities: [gpu]
-    #           device_ids: ["0"]  # select one GPU
-    #     limits:
-    #       cpus: "31.0"
-    #       memory: 48g
-    ports:
-      - 8848:8888
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     volumes:
-      - ./data:/home/jovyan/work
+      - /home/surajt/projects/fastbook:/home/jovyan/work
     environment:
       GRANT_SUDO: "yes"
       JUPYTER_ENABLE_LAB: "yes"
-      NB_UID: ${JUPYTER_UID:-1000}
-      NB_GID: ${JUPYTER_GID:-1000}
-    # enable sudo permissions
+      NB_UID: "1000"
+      NB_GID: "1000"
     user:
       "root"
-    restart: always
+
+networks:
+  default:
+    external: true
+    name: nexus
