@@ -25,24 +25,42 @@ RUN pip install --no-cache-dir --upgrade \
  && fix-permissions "${CONDA_DIR}" \
  && fix-permissions "/home/${NB_USER}"
 
-RUN pip install --no-cache-dir \
-    # install extension manager
-    jupyter_contrib_nbextensions==0.7.0 \
-    jupyter_nbextensions_configurator==0.6.1 \
-    # install git extension
-    jupyterlab-git==0.41.0 \
-    # install plotly extension
-    plotly==5.13.1 \
-    # install drawio and graphical extensions
-    jupyterlab-drawio==0.9.0 \
-    rise==5.7.1 \
-    ipyleaflet==0.17.2 \
-    ipywidgets==8.0.4 \
-    # install spell checker
-    jupyterlab-spellchecker==0.7.3 && \
+RUN pip install --no-cache-dir --upgrade \
+    fastai \
     # fix permissions of conda
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+ && fix-permissions "${CONDA_DIR}" \
+ && fix-permissions "/home/${NB_USER}"
+
+
+# RUN mamba install --quiet --yes \
+#     fastai \
+#     -c fastai && \
+#     mamba clean --all -f -y && \
+#     fix-permissions "${CONDA_DIR}" && \
+#     fix-permissions "/home/${NB_USER}"
+
+# RUN pip install --no-cache-dir \
+#     # install extension manager
+#     # jupyter_contrib_nbextensions==0.7.0 \
+#     # jupyter_nbextensions_configurator==0.6.1 \
+#     # install git extension
+#     jupyterlab-git==0.41.0 \
+#     # install plotly extension
+#     plotly==5.13.1 \
+#     # install drawio and graphical extensions
+#     jupyterlab-drawio==0.9.0 \
+#     rise==5.7.1 \
+#     ipyleaflet==0.17.2 \
+#     ipywidgets==8.0.4 \
+#     # install spell checker
+#     jupyterlab-spellchecker==0.7.3 && \
+#     # fix permissions of conda
+#     fix-permissions "${CONDA_DIR}" && \
+#     fix-permissions "/home/${NB_USER}"
+
+
+# RUN jupyter contrib nbextension install --user
+# RUN jupyter nbextension enable hinterland/main
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
